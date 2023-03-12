@@ -1,5 +1,5 @@
 import type { ChatMessage } from '@/types'
-import { createSignal, Index, Show, onMount, onCleanup } from 'solid-js'
+import { createSignal, For, Show, onMount, onCleanup } from 'solid-js'
 import IconClear from './icons/Clear'
 import MessageItem from './MessageItem'
 import SystemRoleSettings from './SystemRoleSettings'
@@ -154,6 +154,12 @@ export default () => {
     }
   }
 
+  const deleteMessageItem = (index: number) => {
+    const newMessageList = [...messageList()];
+    newMessageList.splice(index, 1)
+    setMessageList([...newMessageList])
+  }
+
   const retryLastFetch = () => {
     if (messageList().length > 0) {
       const lastMessage = messageList()[messageList().length - 1]
@@ -183,16 +189,17 @@ export default () => {
         currentSystemRoleSettings={currentSystemRoleSettings}
         setCurrentSystemRoleSettings={setCurrentSystemRoleSettings}
       />
-      <Index each={messageList()}>
+      <For each={messageList()}>
         {(message, index) => (
           <MessageItem
-            role={message().role}
-            message={message().content}
-            showRetry={() => (message().role === 'assistant' && index === messageList().length - 1)}
+            role={message.role}
+            message={message.content}
+            showRetry={() => (message.role === 'assistant' && index() === messageList().length - 1)}
             onRetry={retryLastFetch}
+            onDelete={() => deleteMessageItem(index())}
           />
         )}
-      </Index>
+      </For>
       {currentAssistantMessage() && (
         <MessageItem
           role="assistant"
