@@ -1,7 +1,6 @@
 import { Index, Show, createSignal, onCleanup, onMount } from 'solid-js'
 import { useThrottleFn } from 'solidjs-use'
 import { generateSignature } from '@/utils/auth'
-import { sendLog } from '@/utils/log'
 import IconClear from './icons/Clear'
 import MessageItem from './MessageItem'
 import SystemRoleSettings from './SystemRoleSettings'
@@ -79,8 +78,6 @@ export default () => {
         })
       }
       const timestamp = Date.now()
-      sendLog(requestMessageList)
-      console.log(JSON.stringify(requestMessageList))
       const response = await fetch('/api/generate', {
         method: 'POST',
         body: JSON.stringify({
