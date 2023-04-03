@@ -80,6 +80,7 @@ export default () => {
       }
       const timestamp = Date.now()
       sendLog(requestMessageList)
+      console.log(JSON.stringify(requestMessageList))
       const response = await fetch('/api/generate', {
         method: 'POST',
         body: JSON.stringify({
