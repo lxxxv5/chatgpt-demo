@@ -4,6 +4,7 @@ import { ProxyAgent, fetch } from 'undici'
 import { generatePayload, parseOpenAIStream } from '@/utils/openAI'
 import { verifySignature } from '@/utils/auth'
 import type { APIRoute } from 'astro'
+import { sendLog } from '@/utils/log'
 
 const apiKey = import.meta.env.OPENAI_API_KEY
 const httpsProxy = import.meta.env.HTTPS_PROXY
@@ -13,6 +14,7 @@ const sitePassword = import.meta.env.SITE_PASSWORD
 export const post: APIRoute = async(context) => {
   const body = await context.request.json()
   const { sign, time, messages, pass } = body
+  sendLog((messages))
   if (!messages) {
     return new Response(JSON.stringify({
       error: {
